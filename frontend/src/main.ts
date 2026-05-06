@@ -1,7 +1,11 @@
-import { platformBrowser } from '@angular/platform-browser';
-import { AppModule } from './app/app-module';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { App } from './app/app';
+import { provideHttpClient } from '@angular/common/http';
+import { API_URL } from './app/services/api.token';
 
-platformBrowser().bootstrapModule(AppModule, {
-  
-})
-  .catch(err => console.error(err));
+bootstrapApplication(App, {
+  providers: [
+    provideHttpClient(),
+    { provide: API_URL, useValue: 'http://localhost:3001/api' }
+  ]
+});

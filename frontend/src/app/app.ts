@@ -1,11 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
+import { InventarioDashboard } from './components/inventario-dashboard/inventario-dashboard';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
+  imports: [InventarioDashboard],
   templateUrl: './app.html',
-  standalone: false,
-  styleUrl: './app.scss'
 })
-export class App {
-  protected readonly title = signal('frontend');
-}
+export class App {}
