@@ -1,0 +1,310 @@
+/* ============================================
+   ESTILOS INVENTARIO DASHBOARD
+   ============================================ */
+
+.dashboard-container {
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #e6f0ff 0%, #f0e6ff 50%, #ffe6f0 100%);
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-container::before {
+  content: '';
+  position: fixed;
+  top: -50%;
+  right: -10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(0, 102, 255, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.dashboard-container > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Encabezado */
+.dashboard-header {
+  margin-bottom: 2rem;
+  animation: slideInRight 0.5s ease-out;
+}
+
+.dashboard-header h2 {
+  color: var(--text-primary);
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Estados de carga y error */
+.loading-container,
+.error-container {
+  padding: 2rem;
+  text-align: center;
+  border-radius: 1rem;
+  margin-bottom: 1.5rem;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.loading-container {
+  background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
+  color: var(--primary-dark);
+}
+
+.loading-container::after {
+  content: '';
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin-left: 0.5rem;
+  border: 2px solid var(--primary-color);
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: pulse 0.8s linear infinite;
+}
+
+.error-container {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: var(--danger-color);
+  border-left: 4px solid var(--danger-color);
+}
+
+/* Tabla de productos */
+.table-container {
+  background: var(--bg-primary);
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 2rem;
+  animation: fadeIn 0.5s ease-out;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+table thead {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  color: white;
+}
+
+table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+table tbody tr {
+  transition: all var(--transition-base);
+}
+
+table tbody tr:hover {
+  background-color: var(--bg-secondary);
+  transform: scale(1.01);
+  box-shadow: inset 0 0 10px rgba(99, 102, 241, 0.05);
+}
+
+table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Stock con colores dinámicos */
+table td[style*='color: red'] {
+  font-weight: 600;
+  color: var(--danger-color) !important;
+  background-color: rgba(239, 68, 68, 0.05);
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  display: inline-block;
+  min-width: 60px;
+  text-align: center;
+}
+
+/* Formulario */
+.formulario-container {
+  background: var(--bg-primary);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 2rem;
+  animation: fadeIn 0.6s ease-out;
+}
+
+.formulario-container h3 {
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.formulario-container h3::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 24px;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  border-radius: 2px;
+}
+
+form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+form select,
+form input {
+  background-color: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  transition: all var(--transition-base);
+  color: var(--text-primary);
+}
+
+form select::placeholder,
+form input::placeholder {
+  color: var(--text-tertiary);
+}
+
+form select:hover,
+form input:hover {
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.05);
+}
+
+form select:focus,
+form input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  background-color: var(--bg-primary);
+}
+
+form button {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-md);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.875rem;
+}
+
+form button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+form button:active {
+  transform: translateY(0);
+}
+
+/* Alertas */
+.alertas-container {
+  background: var(--bg-primary);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-lg);
+  animation: fadeIn 0.7s ease-out;
+}
+
+.alertas-container h3 {
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.alertas-container h3::before {
+  content: '⚠️';
+  font-size: 1.25rem;
+}
+
+ul {
+  list-style: none;
+}
+
+ul li {
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  border-left: 4px solid var(--danger-color);
+  border-radius: 0.5rem;
+  color: var(--danger-color);
+  font-weight: 500;
+  animation: slideInRight 0.4s ease-out;
+}
+
+ul li::before {
+  content: '🔔 ';
+  margin-right: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1rem;
+  }
+
+  .dashboard-header h2 {
+    font-size: 1.5rem;
+  }
+
+  table {
+    font-size: 0.75rem;
+  }
+
+  table th,
+  table td {
+    padding: 0.75rem 0.5rem;
+  }
+
+  form {
+    grid-template-columns: 1fr;
+  }
+
+  .formulario-container,
+  .alertas-container {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-header h2 {
+    font-size: 1.25rem;
+  }
+
+  table th {
+    font-size: 0.65rem;
+  }
+
+  table td {
+    padding: 0.5rem;
+    font-size: 0.7rem;
+  }
+}

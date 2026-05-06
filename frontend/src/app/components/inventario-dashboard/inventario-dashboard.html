@@ -1,0 +1,264 @@
+<!-- IA-CONSULTA: Cómo estructurar un componente standalone con formularios reactivos y consumo de API
+y mejora de diseño UX/UI moderno -->
+<!-- IA-SUGERENCIA: Usar OnInit + FormBuilder + estado local
+(loading/error) -->
+<!-- IA-DECISION: Implementación con manejo básico de estado y separación de
+responsabilidades, agregar iconos y colores llamativos -->
+
+<div class="max-w-7xl mx-auto p-8 space-y-8">
+  <!-- HEADER PRINCIPAL -->
+  <div class="text-center mb-12">
+    <h1
+      class="text-5xl font-black bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4"
+    >
+      📦 Sistema de Inventario
+    </h1>
+    <p class="text-xl text-gray-600 font-medium max-w-2xl mx-auto">
+      Gestiona tus productos, movimientos y alertas de stock en tiempo real
+    </p>
+  </div>
+
+  <!-- ESTADOS DEL SISTEMA -->
+  <div
+    *ngIf="loading"
+    class="bg-linear-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-500 p-6 rounded-xl shadow-lg"
+  >
+    <div class="flex items-center gap-4">
+      <div
+        class="animate-spin rounded-full h-8 w-8 border-4 border-blue-500 border-t-transparent"
+      ></div>
+      <div>
+        <h3 class="text-lg font-bold text-blue-800">Cargando datos del inventario...</h3>
+        <p class="text-blue-600">Por favor espera mientras sincronizamos la información</p>
+      </div>
+    </div>
+  </div>
+
+  <div
+    *ngIf="error"
+    class="bg-linear-to-r from-red-50 to-pink-50 border-l-4 border-red-500 p-6 rounded-xl shadow-lg"
+  >
+    <div class="flex items-center gap-4">
+      <div class="text-red-500 text-2xl">⚠️</div>
+      <div>
+        <h3 class="text-lg font-bold text-red-800">Error de conexión</h3>
+        <p class="text-red-600">{{ error }}</p>
+        <button
+          class="mt-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
+        >
+          Reintentar conexión
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRID PRINCIPAL -->
+  <div class="grid lg:grid-cols-3 gap-8" *ngIf="!loading && !error">
+    <!-- TABLA DE PRODUCTOS -->
+    <div
+      class="lg:col-span-2 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden"
+    >
+      <div class="bg-linear-to-r from-blue-600 to-purple-600 p-6">
+        <h3 class="text-2xl font-bold text-white flex items-center gap-3">
+          <span class="text-3xl">📋</span>
+          Lista de Productos
+        </h3>
+        <p class="text-blue-100 mt-2">Control total de tu inventario</p>
+      </div>
+
+      <div class="p-6">
+        <div class="mb-4 flex justify-between items-center">
+          <div class="text-sm text-gray-600">
+            <span class="font-semibold text-gray-800">{{ productos.length }}</span> productos
+            registrados
+          </div>
+          <div class="flex gap-2">
+            <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">
+              ✅ Stock OK: {{ productos.filter((p) => p.stockActual >= p.stockMinimo).length }}
+            </span>
+            <span class="px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs font-semibold">
+              ⚠️ Bajo stock: {{ productos.filter((p) => p.stockActual < p.stockMinimo).length }}
+            </span>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b-2 border-gray-200 text-left">
+                <th class="py-4 px-4 font-bold text-gray-800 uppercase tracking-wider">Producto</th>
+                <th class="py-4 px-4 font-bold text-gray-800 uppercase tracking-wider">
+                  Categoría
+                </th>
+                <th class="py-4 px-4 font-bold text-gray-800 uppercase tracking-wider text-center">
+                  Stock Actual
+                </th>
+                <th class="py-4 px-4 font-bold text-gray-800 uppercase tracking-wider text-center">
+                  Estado
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr
+                *ngFor="let p of productos"
+                class="border-b border-gray-100 hover:bg-linear-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-200 transform hover:scale-[1.01]"
+              >
+                <td class="py-4 px-4">
+                  <div class="font-bold text-gray-900 text-lg">{{ p.nombre }}</div>
+                  <div class="text-xs text-gray-500">ID: {{ p.id }}</div>
+                </td>
+                <td class="py-4 px-4">
+                  <span
+                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800"
+                  >
+                    {{ p.categoria }}
+                  </span>
+                </td>
+                <td class="py-4 px-4 text-center">
+                  <span
+                    class="text-2xl font-black"
+                    [class.text-red-600]="p.stockActual < p.stockMinimo"
+                    [class.text-green-600]="p.stockActual >= p.stockMinimo"
+                  >
+                    {{ p.stockActual }}
+                  </span>
+                  <div class="text-xs text-gray-500 mt-1">mínimo: {{ p.stockMinimo }}</div>
+                </td>
+                <td class="py-4 px-4 text-center">
+                  <span
+                    *ngIf="p.stockActual >= p.stockMinimo"
+                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800"
+                  >
+                    <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                    STOCK OK
+                  </span>
+                  <span
+                    *ngIf="p.stockActual < p.stockMinimo"
+                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-800 animate-pulse"
+                  >
+                    <span class="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
+                    BAJO STOCK
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL LATERAL -->
+    <div class="space-y-6">
+      <!-- FORMULARIO DE MOVIMIENTOS -->
+      <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+        <div class="bg-linear-to-r from-green-500 to-teal-600 p-6">
+          <h3 class="text-xl font-bold text-white flex items-center gap-3">
+            <span class="text-2xl">📝</span>
+            Nuevo Movimiento
+          </h3>
+          <p class="text-green-100 mt-2 text-sm">Registra entradas, salidas o ajustes</p>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="registrarMovimiento()" class="p-6 space-y-5">
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-2 items-center gap-2">
+              <span class="text-blue-500">📦</span>
+              Seleccionar Producto
+            </label>
+            <select
+              formControlName="productoId"
+              class="w-full border-2 border-gray-200 rounded-xl p-3 text-gray-700 font-medium focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+              [class.border-red-300]="
+                form.get('productoId')?.invalid && form.get('productoId')?.touched
+              "
+            >
+              <option value="">👆 Elige un producto...</option>
+              <option *ngFor="let p of productos" [value]="p.id">
+                {{ p.nombre }} (Stock: {{ p.stockActual }})
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-2 items-center gap-2">
+              <span class="text-purple-500">🔄</span>
+              Tipo de Movimiento
+            </label>
+            <select
+              formControlName="tipo"
+              class="w-full border-2 border-gray-200 rounded-xl p-3 text-gray-700 font-medium focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all"
+              [class.border-red-300]="form.get('tipo')?.invalid && form.get('tipo')?.touched"
+            >
+              <option value="">👆 Selecciona el tipo...</option>
+              <option value="ENTRADA">📥 Entrada (+)</option>
+              <option value="SALIDA">📤 Salida (-)</option>
+              <option value="AJUSTE">⚙️ Ajuste (=)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-2 items-center gap-2">
+              <span class="text-orange-500">🔢</span>
+              Cantidad
+            </label>
+            <input
+              type="number"
+              formControlName="cantidad"
+              placeholder="Ingresa la cantidad..."
+              class="w-full border-2 border-gray-200 rounded-xl p-3 text-gray-700 font-medium focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all"
+              [class.border-red-300]="
+                form.get('cantidad')?.invalid && form.get('cantidad')?.touched
+              "
+            />
+          </div>
+
+          <button
+            type="submit"
+            [disabled]="form.invalid"
+            class="w-full bg-linear-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 transition-all duration-300 transform hover:scale-105 disabled:transform-none shadow-lg hover:shadow-xl"
+          >
+            <span class="flex items-center justify-center gap-2">
+              <span class="text-xl text-gray-900">🚀</span>
+              Registrar Movimiento
+            </span>
+          </button>
+        </form>
+      </div>
+
+      <!-- ALERTAS -->
+      <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+        <div class="bg-linear-to-r from-red-500 to-pink-600 p-6">
+          <h3 class="text-xl font-bold text-white flex items-center gap-3">
+            <span class="text-2xl animate-bounce">🚨</span>
+            Alertas Activas
+          </h3>
+          <p class="text-red-100 mt-2 text-sm">{{ alertas.length }} alertas requieren atención</p>
+        </div>
+
+        <div class="p-6">
+          <div *ngIf="alertas.length === 0" class="text-center py-8">
+            <div class="text-4xl mb-4">✅</div>
+            <p class="text-gray-600 font-medium">¡Todo en orden!</p>
+            <p class="text-sm text-gray-500">No hay alertas pendientes</p>
+          </div>
+
+          <ul class="space-y-3" *ngIf="alertas.length > 0">
+            <li
+              *ngFor="let a of alertas"
+              class="p-4 bg-linear-to-r from-red-50 to-pink-50 border-l-4 border-red-500 rounded-xl text-red-800 font-semibold animate-pulse"
+            >
+              <div class="flex items-start gap-3">
+                <span class="text-red-500 text-lg mt-0.5">⚠️</span>
+                <div>
+                  <div class="font-bold text-red-900">{{ a.mensaje }}</div>
+                  <div class="text-xs text-red-600 mt-1">Requiere atención inmediata</div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
