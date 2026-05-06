@@ -1,6 +1,7 @@
 import express from "express";
 import { errorHandler } from './middleware/error.middleware';
 import productoRoutes from './routes/producto.route';
+import alertaRoutes from './routes/alerta.route';
 
 const app = express();
 
@@ -13,7 +14,7 @@ app.get("/health", (_req, res) => {
 
 /* Rutas de la API */
 app.use('/api', productoRoutes);
-
+app.use('/api', alertaRoutes);
 
 
 /* Middleware de manejo de errores */
