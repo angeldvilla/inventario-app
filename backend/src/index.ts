@@ -1,4 +1,5 @@
 import express from "express";
+import { errorHandler } from './middleware/error.middleware';
 import productoRoutes from './routes/producto.route';
 
 const app = express();
@@ -13,6 +14,10 @@ app.get("/health", (_req, res) => {
 /* Rutas de la API */
 app.use('/api', productoRoutes);
 
+
+
+/* Middleware de manejo de errores */
+app.use(errorHandler);
 
 /* Corre el servidor */
 const PORT = 3001;
